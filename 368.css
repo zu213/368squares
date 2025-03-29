@@ -66,6 +66,17 @@ button:not(:disabled):active {
     position: relative;
 }
 
+.inlineLeft {
+    display: inline-block;
+}
+
+.inlineRight {
+    display: inline-block;
+    text-align: right;
+    right: 0;
+    position: relative;
+}
+
 .counterContainer {
     width: 100%;
     vertical-align: middle;
@@ -148,16 +159,20 @@ button:not(:disabled):active {
     background-color: red;
 }
 
-@media only screen and (max-width: 500px) {
-    .container {
-      width: 80vw;
-      left: 5vw;
-      height: 80vw;
-    }
-
+@media only screen and (max-width: 750px) {
     .grid {
         height: 80vw;
+        width: 100%;
     }
+
+    .container {
+        width: 80vw;
+        left: 5vw;
+        height: 80vw;
+      }
+}
+
+@media only screen and (max-width: 500px) {
 
     .chicken {
         width: 8vw;
@@ -168,11 +183,28 @@ button:not(:disabled):active {
         margin: 2vw;
     }
 
-    .grid {
-        width: 100%;
-    }
-
     .counterContainer {
         padding-left: 10%;
+        height: 10vh;
+    }
+
+    .inlineLeft {
+        display: block;
+        padding-left: 10%;
+    }
+
+    .inlineRight {
+        display: block;
+        text-align: center;
+        right: 50%;
+        transform: translate(60%, 0%);
+    }
+
+}
+
+@media only screen and (max-width: 500px) {
+    
+    .inlineLeft {
+        padding-left: 0%;
     }
 }
