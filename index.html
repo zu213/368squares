@@ -6,26 +6,24 @@
 
 <body>
 
-    <div>
+    <h1>
         Matching game
-    </div>
-    <div>
-        Match 3 or more in a row to remove them, trya nd get rid of as many as possible without filling up the board
+    </h1>
+    <div class="intro">
+        Drag and drop pairs of cubes into the grid match 3 or more in a row to remove them, 
+        try and get rid of as many as possible without filling up the board.
     </div>
 
     <div id="background" class="container">
         
-
-        
         <div class="counterContainer">
-            <div id="remainingChickens" class="left"></div>
+            <div id="remainingChickens" class="left remainingChickens"></div>
             <div class="right absolute">
                 <button onclick="resetBoard()">Reset</button>
             </div>
         </div>
 
         <div id="grid" class="grid"></div>
-
         <div id="chickenGen"></div>
     </div>
 </body>

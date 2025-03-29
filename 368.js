@@ -161,7 +161,7 @@ function getColour(el){
 }
 
 function updateChickens(){
-    document.getElementById('remainingChickens').innerText = remainingChickens
+    document.getElementById('remainingChickens').innerText = `${remainingChickens} remaining`
 }
 
 function checkMatch(pos){

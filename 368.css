@@ -1,9 +1,24 @@
 
 body {
-
-    background-color: beige;
+    font-family:'Times New Roman', Times, serif;
+    background-color: rgb(54, 70, 252);
+    color: white;
+    user-select: none; 
 }
 
+h1 {
+    text-align: center;
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+
+.intro {
+    padding-bottom: 10px;
+    padding-left: 10%;
+    padding-right: 10%;
+    text-align: center;
+    font-size: small;
+}
 
 .container {
     width: 24vw;
@@ -16,7 +31,7 @@ body {
     height: 23vw;
     width: 95%;
     margin: 5%;
-    background-color: aqua;
+    background-color: rgb(23, 0, 97);
 }
 
 .gridRow {
@@ -35,7 +50,7 @@ body {
 }
 
 .gridElementInner {
-    background-color: blue;
+    background-color: rgb(4, 4, 180);
     margin: 15%;
     width: 70%;
     height: 70%;
@@ -84,6 +99,13 @@ body {
 
 .counterContainer {
     width: 100%;
+}
+
+.remainingChickens {
+    font-size: large;
+    padding: 1px;
+    left: 5px;
+    position: relative;
 }
 
 .absolute {
