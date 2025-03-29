@@ -78,7 +78,7 @@ function checkValidPlace(e, direction, draggable){
 
     if(direction == 2  && Number(element.id) % 6 != 5){
         let elementAbove = document.getElementById(`${Number(element.id) + 1}`)
-        if(element.innerHTML == '' && elementAbove && elementAbove?.innerHTML == ''){
+        if(element.innerHTML == '' && elementAbove && elementAbove?.innerHTML == '' && !element.classList.contains('chicken') && !elementAbove.classList.contains('chicken')){
             const left = draggable.querySelector('.left')
             left.classList.remove('left')
             const right = draggable.querySelector('.right')
@@ -95,7 +95,7 @@ function checkValidPlace(e, direction, draggable){
         }
     } else if(Number(element.id) % 6 < 30) {
         let elementAbove = document.getElementById(`${Number(element.id) + 6}`)
-        if(element.innerHTML == '' && elementAbove && elementAbove?.innerHTML == ''){
+        if(element.innerHTML == '' && elementAbove && elementAbove?.innerHTML == '' && !element.classList.contains('chicken') && !elementAbove.classList.contains('chicken')){
             element.appendChild(draggable.querySelector('.top')); // Move draggable to cell
             elementAbove.appendChild(draggable.querySelector('.bottom'))
             draggable.classList.remove('draggable')
