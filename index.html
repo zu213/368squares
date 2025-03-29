@@ -5,26 +5,27 @@
 </head>
 
 <body>
+
+    <div>
+        Matching game
+    </div>
+    <div>
+        Match 3 or more in a row to remove them, trya nd get rid of as many as possible without filling up the board
+    </div>
+
     <div id="background" class="container">
-        <div>
-            Title 123
+        
+
+        
+        <div class="counterContainer">
+            <div id="remainingChickens" class="left"></div>
+            <div class="right absolute">
+                <button onclick="resetBoard()">Reset</button>
+            </div>
         </div>
 
-        <div id="remainingChickens">
+        <div id="grid" class="grid"></div>
 
-        </div>
-        <div>
-            <button onclick="resetBoard()">Reset</button>
-        </div>
-
-        <div id="grid" class="grid">
-
-        </div>
-
-        <div id="chickenGen">
-
-        </div>
-
-
+        <div id="chickenGen"></div>
     </div>
 </body>

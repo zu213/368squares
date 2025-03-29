@@ -30,19 +30,17 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("mousemove", (e) => {
         if (isDragging) {
             draggable.style.position = 'fixed'
-            draggable.style.left = `${e.clientX}px`;
-            draggable.style.top = `${e.clientY}px`;
+            draggable.style.left = `${e.clientX - 10}px`;
+            draggable.style.top = `${e.clientY - 10}px`;
         }
     });
 
     // Allow Dropping in Grid
     document.addEventListener("mouseup", (e) => {
-
             if (isDragging) {
                 checkValidPlace(e, direction, draggable)
+                isDragging = false;
             }
-            isDragging = false;
-
     });
 
     updateChickens()
@@ -81,8 +79,12 @@ function checkValidPlace(e, direction, draggable){
     if(direction == 2  && Number(element.id) % 6 != 5){
         let elementAbove = document.getElementById(`${Number(element.id) + 1}`)
         if(element.innerHTML == '' && elementAbove && elementAbove?.innerHTML == ''){
-            element.appendChild(draggable.querySelector('.left')); // Move draggable to cell
-            elementAbove.appendChild(draggable.querySelector('.right'))
+            const left = draggable.querySelector('.left')
+            left.classList.remove('left')
+            const right = draggable.querySelector('.right')
+            right.classList.remove('right')
+            element.appendChild(left); // Move draggable to cell
+            elementAbove.appendChild(right)
             draggable.classList.remove('draggable')
             checkMatch(Number(element.id))
             checkMatch(Number(element.id) + 1)
@@ -135,9 +137,9 @@ function generateChicken(){
         // Calculate the offset of the mouse click relative to the element's position
          if(element.classList.contains('chickenHolder')){
             direction = element.children[0].classList.contains('top') ? 2 : 1
-        } else if(element.classList.contains('top')){
+        } else if(element.classList.contains('top') || element.classList.contains('bottom')){
             direction = 1
-        } else if(element.classList.contains('left')){
+        } else if(element.classList.contains('left') || element.classList.contains('right')){
             direction = 2
         } else {
             throw Error('a')
