@@ -10,7 +10,7 @@ var genChicken = true
 var draggable
 
 document.addEventListener("DOMContentLoaded", function () {
-    let grid = document.getElementById("grid");
+    let grid = document.getElementById("grid")
 
     for(var i = 0; i < 6; i++){
         let gridRowElement = document.createElement('div') 
@@ -30,24 +30,41 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("mousemove", (e) => {
         if (isDragging) {
             draggable.style.position = 'fixed'
-            draggable.style.left = `${e.clientX - 10}px`;
-            draggable.style.top = `${e.clientY - 10}px`;
+            draggable.style.left = `${e.clientX - 10}px`
+            draggable.style.top = `${e.clientY - 10}px`
         }
-    });
+    })
 
-    // Allow Dropping in Grid
+    document.addEventListener("touchmove", (e) => {
+        if (isDragging) {
+            let touch = e.touches[0] || e.changedTouches[0]
+            draggable.style.position = 'fixed'
+            draggable.style.left = `${touch.clientX - 10}px`
+            draggable.style.top = `${touch.clientY - 10}px`
+        }
+    })
+
+    // allow Dropping in Grid
     document.addEventListener("mouseup", (e) => {
-            if (isDragging) {
-                checkValidPlace(e, direction, draggable)
-                isDragging = false;
-            }
-    });
+        if (isDragging) {
+            checkValidPlace(e, direction, draggable)
+            isDragging = false
+        }
+    })
+
+    document.addEventListener("touchend", (e) => {
+        if (isDragging) {
+            let touch = e.touches[0] || e.changedTouches[0]
+            checkValidPlace(touch, direction, draggable)
+            isDragging = false
+        }
+     })
 
     updateChickens()
-});
+})
 
 function assignPositions(chickens){
-    let randomNum = Math.random();
+    let randomNum = Math.random()
     if(randomNum <= 0.5){
         chickens.children[0].classList.add('top')
         chickens.children[1].classList.add('bottom')
@@ -56,7 +73,7 @@ function assignPositions(chickens){
         chickens.children[1].classList.add('right')
     }
     for(var i = 0; i < 2; i++){
-        let colour = Math.random();
+        let colour = Math.random()
         if(colour <= 0.25){
             chickens.children[i].classList.add('pink')
         }else  if(colour <= 0.5){
@@ -72,9 +89,9 @@ function assignPositions(chickens){
 
 function checkValidPlace(e, direction, draggable){
     // left: 1, up: 2, right: 3, down: 4
-    draggable.style.display = "none";
+    draggable.style.display = "none"
     let element = document.elementFromPoint(e.clientX, e.clientY)
-    draggable.style.display = "block";
+    draggable.style.display = "block"
 
     if(direction == 2  && Number(element.id) % 6 != 5){
         let elementAbove = document.getElementById(`${Number(element.id) + 1}`)
@@ -83,7 +100,7 @@ function checkValidPlace(e, direction, draggable){
             left.classList.remove('left')
             const right = draggable.querySelector('.right')
             right.classList.remove('right')
-            element.appendChild(left); // Move draggable to cell
+            element.appendChild(left) // Move draggable to cell
             elementAbove.appendChild(right)
             draggable.classList.remove('draggable')
             checkMatch(Number(element.id))
@@ -96,7 +113,7 @@ function checkValidPlace(e, direction, draggable){
     } else if(Number(element.id) % 6 < 30) {
         let elementAbove = document.getElementById(`${Number(element.id) + 6}`)
         if(element.innerHTML == '' && elementAbove && elementAbove?.innerHTML == '' && !element.classList.contains('chicken') && !elementAbove.classList.contains('chicken')){
-            element.appendChild(draggable.querySelector('.top')); // Move draggable to cell
+            element.appendChild(draggable.querySelector('.top')) // Move draggable to cell
             elementAbove.appendChild(draggable.querySelector('.bottom'))
             draggable.classList.remove('draggable')
             checkMatch(Number(element.id))
@@ -107,7 +124,7 @@ function checkValidPlace(e, direction, draggable){
             chickenGen.appendChild(draggable)
         }
     }
-    draggable.style.position = "relative"; // Reset position to align with cell
+    draggable.style.position = "relative" // Reset position to align with cell
     draggable.style.left = "0px"
     draggable.style.top = "0px"
 }
@@ -126,29 +143,33 @@ function generateChicken(){
     chickens.appendChild(chicken2)
     chickenGen.appendChild(assignPositions(chickens))
 
-    draggable = document.querySelector(".draggable");    
+    draggable = document.querySelector(".draggable")  
 
     // Drag Start Event
-    draggable.addEventListener("mousedown", (e) => {
+    draggable.addEventListener("mousedown", (e) => handleDrag(e))
+    draggable.addEventListener("touchstart", (e) => {
+        let touch = e.touches[0] || e.changedTouches[0]
+        handleDrag(touch)
+    })
 
-        let element = document.elementFromPoint(e.clientX, e.clientY)
-        let rect = element.getBoundingClientRect();
 
-        // Calculate the offset of the mouse click relative to the element's position
-         if(element.classList.contains('chickenHolder')){
-            direction = element.children[0].classList.contains('top') ? 2 : 1
-        } else if(element.classList.contains('top') || element.classList.contains('bottom')){
-            direction = 1
-        } else if(element.classList.contains('left') || element.classList.contains('right')){
-            direction = 2
-        } else {
-            throw Error('a')
-        }
-        console.log(direction)
-        isDragging = true;
-        draggable.style.position = "absolute";
-        draggable.style.zIndex = "1000";
-    });
+}
+
+function handleDrag(e) {
+    let element = document.elementFromPoint(e.clientX, e.clientY)
+
+    if(element.classList.contains('chickenHolder')){
+        direction = element.children[0].classList.contains('top') ? 2 : 1
+    } else if(element.classList.contains('top') || element.classList.contains('bottom')){
+        direction = 1
+    } else if(element.classList.contains('left') || element.classList.contains('right')){
+        direction = 2
+    } else {
+        throw Error('Error')
+    }
+    isDragging = true
+    draggable.style.position = "absolute"
+    draggable.style.zIndex = "1000"
 }
 
 function getColour(el){
@@ -175,7 +196,6 @@ function checkMatch(pos){
 
     var remove = false
     var counter = 0
-    console.log(pos)
 
     for(var i = 3; i < 7; i++){
         if(val == lastVal && lastLastVal == lastVal && val != 'none'){
@@ -211,13 +231,9 @@ function checkMatch(pos){
     val = getColour(el.children[0] ?? '')
     lastVal = getColour(lastEl.children[0] ?? '')
     lastLastVal = getColour(lastLastEl.children[0] ?? '')
-
     remove = false
 
     for(var i = 3; i < 7; i++){
-        console.log(val, lastVal, lastLastVal)
-        console.log(el, lastEl, lastLastEl)
-
         if(val == lastVal && lastLastVal == lastVal && val != 'none'){
             counter++
             lastLastEl.innerHTML = ''
@@ -237,13 +253,11 @@ function checkMatch(pos){
             val = getColour(el.children[0] ?? '')
         }
     }
-
     if(remove) {
         lastEl.innerHTML = ''
         el.innerHTML =''
     }
 
-    console.log('counter:',counter)
     remainingChickens -= counter
     updateChickens()
 }
