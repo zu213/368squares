@@ -159,6 +159,12 @@ button:not(:disabled):active {
     background-color: red;
 }
 
+.gridElementInner .chicken {
+    width: 80%;
+    height: 80%;
+    left: 5%;
+}
+
 @media only screen and (max-width: 750px) {
     .grid {
         height: 80vw;
