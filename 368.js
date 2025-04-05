@@ -37,12 +37,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener("touchmove", (e) => {
         if (isDragging) {
+            e.preventDefault()
             let touch = e.touches[0] || e.changedTouches[0]
             draggable.style.position = 'fixed'
             draggable.style.left = `${touch.clientX - 10}px`
             draggable.style.top = `${touch.clientY - 10}px`
         }
-    })
+    }, { passive: false })
 
     // allow Dropping in Grid
     document.addEventListener("mouseup", (e) => {
@@ -54,11 +55,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener("touchend", (e) => {
         if (isDragging) {
+            e.preventDefault()
             let touch = e.touches[0] || e.changedTouches[0]
             checkValidPlace(touch, direction, draggable)
             isDragging = false
         }
-     })
+     }, { passive: false })
 
     updateChickens()
 })
@@ -148,9 +150,10 @@ function generateChicken(){
     // Drag Start Event
     draggable.addEventListener("mousedown", (e) => handleDrag(e))
     draggable.addEventListener("touchstart", (e) => {
+        e.preventDefault()
         let touch = e.touches[0] || e.changedTouches[0]
         handleDrag(touch)
-    })
+    }, { passive: false })
 
 
 }

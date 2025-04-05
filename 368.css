@@ -109,6 +109,11 @@ button:not(:disabled):active {
     height: calc(100% / 6); 
 }
 
+.draggable {
+    touch-action: none;
+    user-select: none;
+}
+
 .draggable div {
     margin: 1vw;
 }
