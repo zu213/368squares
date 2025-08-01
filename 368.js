@@ -86,9 +86,10 @@ function assignPositions(chickens){
 function checkValidPlace(e, direction, draggable){
     // left: 1, up: 2, right: 3, down: 4
     draggable.style.display = "none"
-    const xPoint = e.clientX - offsetX * 0.5
-    const yPoint = direction == 1 ?  e.clientY - (offsetY) * 0.5 :  e.clientY - offsetY * 0.5
+    const xPoint = e.clientX - (offsetX - 20) * 0.5
+    const yPoint = e.clientY - offsetY * 0.5
     let element = document.elementFromPoint(xPoint, yPoint)
+    if(element.innerHTML != '') element = element.childNodes[0]
     draggable.style.display = "block"
 
     if(direction == 2  && Number(element.id) % 6 != 5){
@@ -205,6 +206,7 @@ function checkMatch(pos){
     var lastVal = getColour(lastEl.children[0] ?? '')
     var lastLastVal = getColour(lastLastEl.children[0] ?? '')
 
+    var toRemove = []
     var remove = false
     var counter = 0
 
@@ -230,8 +232,8 @@ function checkMatch(pos){
     }
 
     if(remove) {
-        lastEl.innerHTML = ''
-        el.innerHTML =''
+        toRemove.push(lastEl)
+        toRemove.push(el)
     }
 
 
@@ -265,8 +267,13 @@ function checkMatch(pos){
         }
     }
     if(remove) {
-        lastEl.innerHTML = ''
-        el.innerHTML =''
+        toRemove.push(lastEl)
+        toRemove.push(el)
+    }
+
+
+    for(const el of toRemove) {
+        el.innerHTML = ''
     }
 
     remainingChickens -= counter
