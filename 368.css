@@ -135,6 +135,8 @@ button:not(:disabled):active {
 
 .chickenHolder {
     background-color: transparent;
+    width: fit-content;
+    height: fit-content;
 }
 
 .chicken {

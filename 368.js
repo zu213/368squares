@@ -4,8 +4,8 @@ var remainingChickens = 368
 var chickenGen
 var isDragging = false
 var direction
-var offsetX
-var offsetY
+var offsetX = 0
+var offsetY = 0
 var genChicken = true
 var draggable
 
@@ -29,20 +29,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Mouse Move -> Move Element with Cursor
     document.addEventListener("mousemove", (e) => {
         if (isDragging) {
-            draggable.style.position = 'fixed'
-            draggable.style.left = `${e.clientX - 10}px`
-            draggable.style.top = `${e.clientY - 10}px`
+            moveSquare(e)
+
         }
     })
 
     document.addEventListener("touchmove", (e) => {
-        if (isDragging) {
-            e.preventDefault()
-            let touch = e.touches[0] || e.changedTouches[0]
-            draggable.style.position = 'fixed'
-            draggable.style.left = `${touch.clientX - 10}px`
-            draggable.style.top = `${touch.clientY - 10}px`
-        }
+        let touch = e.touches[0] || e.changedTouches[0]
+        moveSquare(touch)
     }, { passive: false })
 
     // allow Dropping in Grid
@@ -92,7 +86,9 @@ function assignPositions(chickens){
 function checkValidPlace(e, direction, draggable){
     // left: 1, up: 2, right: 3, down: 4
     draggable.style.display = "none"
-    let element = document.elementFromPoint(e.clientX, e.clientY)
+    const xPoint = e.clientX - offsetX * 0.5
+    const yPoint = direction == 1 ?  e.clientY - (offsetY) * 0.5 :  e.clientY - offsetY * 0.5
+    let element = document.elementFromPoint(xPoint, yPoint)
     draggable.style.display = "block"
 
     if(direction == 2  && Number(element.id) % 6 != 5){
@@ -154,16 +150,19 @@ function generateChicken(){
         let touch = e.touches[0] || e.changedTouches[0]
         handleDrag(touch)
     }, { passive: false })
-
-
 }
 
 function handleDrag(e) {
     let element = document.elementFromPoint(e.clientX, e.clientY)
+    const offsetEl = element.classList.contains('chickenHolder') ? element : element.parentElement
+    const rect = offsetEl.getBoundingClientRect()
+    offsetX = e.clientX - rect.left
+    offsetY = e.clientY - rect.top
 
     if(element.classList.contains('chickenHolder')){
         direction = element.children[0].classList.contains('top') ? 2 : 1
     } else if(element.classList.contains('top') || element.classList.contains('bottom')){
+        offsetY += 10
         direction = 1
     } else if(element.classList.contains('left') || element.classList.contains('right')){
         direction = 2
@@ -171,8 +170,17 @@ function handleDrag(e) {
         throw Error('Error')
     }
     isDragging = true
-    draggable.style.position = "absolute"
     draggable.style.zIndex = "1000"
+}
+
+function moveSquare(e) {
+    console.log(offsetX, offsetY)
+    if (isDragging) {
+        e.preventDefault()
+        draggable.style.position = 'fixed'
+        draggable.style.left = `${e.clientX - offsetX}px`
+        draggable.style.top = `${e.clientY - offsetY}px`
+    }
 }
 
 function getColour(el){
