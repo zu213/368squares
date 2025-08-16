@@ -28,14 +28,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Mouse Move -> Move Element with Cursor
     document.addEventListener("mousemove", (e) => {
-        if (isDragging) {
-            moveSquare(e)
-
-        }
+        e.preventDefault()
+        moveSquare(e)
     })
 
     document.addEventListener("touchmove", (e) => {
         let touch = e.touches[0] || e.changedTouches[0]
+        console.log(touch)
+        e.preventDefault()
         moveSquare(touch)
     }, { passive: false })
 
@@ -145,7 +145,11 @@ function generateChicken(){
     draggable = document.querySelector(".draggable")  
 
     // Drag Start Event
-    draggable.addEventListener("mousedown", (e) => handleDrag(e))
+    draggable.addEventListener("mousedown", (e) => {
+        e.preventDefault()
+        handleDrag(e)
+    })
+
     draggable.addEventListener("touchstart", (e) => {
         e.preventDefault()
         let touch = e.touches[0] || e.changedTouches[0]
@@ -175,9 +179,7 @@ function handleDrag(e) {
 }
 
 function moveSquare(e) {
-    console.log(offsetX, offsetY)
     if (isDragging) {
-        e.preventDefault()
         draggable.style.position = 'fixed'
         draggable.style.left = `${e.clientX - offsetX}px`
         draggable.style.top = `${e.clientY - offsetY}px`
