@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener("touchmove", (e) => {
         let touch = e.touches[0] || e.changedTouches[0]
-        console.log(touch)
         e.preventDefault()
         moveSquare(touch)
     }, { passive: false })
