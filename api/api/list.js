@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     });
   }
 
-  const strings = await redis.lrange("strings", 0, -1);
+  const leaderboard = await redis.lrange("368-leaderboard", 0, -1);
 
-  res.json(strings);
+  res.json(leaderboard);
 }

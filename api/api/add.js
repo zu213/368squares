@@ -34,10 +34,10 @@ export default async function handler(req, res) {
   }
 
   // Add new item
-  await redis.rpush("strings", value);
+  await redis.rpush("368-leaderboard", value);
 
   // Keep only latest 100 items
-  await redis.ltrim("strings", -100, -1);
+  await redis.ltrim("368-leaderboard", -100, -1);
 
   res.json({
     success: true,
