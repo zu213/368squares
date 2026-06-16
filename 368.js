@@ -1,4 +1,4 @@
-
+import { fetchBoard } from './bridge.js'
 
 var remainingChickens = 368
 var chickenGen
@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
      }, { passive: false })
 
     updateChickens()
+    loadLeaderboard()
 })
 
 function assignPositions(chickens){
@@ -291,4 +292,16 @@ function resetBoard() {
     }
     remainingChickens = 368
     updateChickens()
+}
+
+async function loadLeaderboard() {
+    const leaderboard = document.getElementById('leaderboard-list')
+    const boardList = await fetchBoard()
+    for(const entry of boardList) {
+        const entryElement = document.createElement('div')
+        entryElement.classList.add('leaderboard-entry')
+        entryElement.innerHTML = `<span class="leaderboard-name">${entry.name}</span>
+                                  <span class="leaderboard-score">${entry.score}</span>`
+        leaderboard.appendChild(entryElement)
+    }
 }

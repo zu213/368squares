@@ -33,11 +33,37 @@ export default async function handler(req, res) {
     });
   }
 
-  // Add new item
-  await redis.rpush("368-leaderboard", value);
+  if(value.split(":").length !== 2) {
+    return res.status(400).json({
+      error: "Invalid value format. Expected 'name:score'",
+    });
+  }
 
-  // Keep only latest 100 items
-  await redis.ltrim("368-leaderboard", -100, -1);
+  const leaderboard = await redis.lrange("368-leaderboard", 0, -1);
+  const processedLeaderboard = leaderboard.map(entry => {
+    const [name, score] = entry.split(":");
+    return { name, score: parseInt(score) };
+  });
+
+  const newScore = parseInt(value.split(":")[1]);
+  const newName = value.split(":")[0];
+
+  // Insert in sorted order (ascending score)
+  const insertAt = processedLeaderboard.findIndex(e => e.score > newScore);
+  if (insertAt === -1) {
+    processedLeaderboard.push({ name: newName, score: newScore });
+  } else {
+    processedLeaderboard.splice(insertAt, 0, { name: newName, score: newScore });
+  }
+
+  // Keep top 10
+  if (processedLeaderboard.length > 10) {
+    processedLeaderboard.splice(10);
+  }
+
+  const newLeaderboard = processedLeaderboard.map(e => `${e.name}:${e.score}`);
+  await redis.del("368-leaderboard");
+  await redis.rpush("368-leaderboard", ...newLeaderboard);
 
   res.json({
     success: true,
