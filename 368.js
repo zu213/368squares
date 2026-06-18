@@ -8,6 +8,7 @@ var offsetX = 0
 var offsetY = 0
 var genChicken = true
 var draggable
+var validMoves = [true, true]
 
 document.addEventListener("DOMContentLoaded", function () {
     let grid = document.getElementById("grid")
@@ -57,16 +58,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateChickens()
     loadLeaderboard()
+    document.getElementById('resetButton').addEventListener('click', resetBoard)
 })
 
 function assignPositions(chickens){
     let randomNum = Math.random()
-    if(randomNum <= 0.5){
+    if((randomNum <= 0.5 && validMoves[0]) || !validMoves[1]){
         chickens.children[0].classList.add('top')
         chickens.children[1].classList.add('bottom')
-    }else{
+    }else if(validMoves[1]){
         chickens.children[0].classList.add('left')
         chickens.children[1].classList.add('right')
+    } else {
+        return
     }
     for(var i = 0; i < 2; i++){
         let colour = Math.random()
@@ -140,7 +144,9 @@ function generateChicken(){
     chicken2.classList.add('chicken')
     chickens.appendChild(chicken1)
     chickens.appendChild(chicken2)
-    chickenGen.appendChild(assignPositions(chickens))
+    let classChickens = assignPositions(chickens)
+    if(!classChickens) return
+    chickenGen.appendChild(classChickens)
 
     draggable = document.querySelector(".draggable")  
 
@@ -200,85 +206,16 @@ function updateChickens(){
 }
 
 function checkMatch(pos){
-    let bottomVal = pos % 6
-    var el = document.getElementById(bottomVal + 12)
-    var lastEl = document.getElementById(bottomVal + 6)
-    var lastLastEl = document.getElementById(bottomVal)
-    var val = getColour(el.children[0] ?? '')
-    var lastVal = getColour(lastEl.children[0] ?? '')
-    var lastLastVal = getColour(lastLastEl.children[0] ?? '')
-
     var toRemove = []
-    var remove = false
     var counter = 0
 
-    for(var i = 3; i < 7; i++){
-        if(val == lastVal && lastLastVal == lastVal && val != 'none'){
-            counter++
-            lastLastEl.innerHTML = ''
-            remove = true
-        } else if((val != lastVal || lastLastVal != lastVal) && remove){
-            counter += 2
-            lastEl.innerHTML = ''
-            lastLastEl.innerHTML = ''
-            remove = false
-        }
-        if(i < 6){
-            lastLastVal = lastVal
-            lastLastEl = lastEl
-            lastVal = val
-            lastEl = el
-            el = document.getElementById(bottomVal + i * 6)
-            val = getColour(el.children[0] ?? '')
-        }
-    }
+    const elementBoard = boardToElementGrid()
+    const numberBoard = elementGridToNumbers(elementBoard)
+    const removeBoard = findWhatToRemove(numberBoard)
+    const score = removeStuffFromGrid(elementBoard, removeBoard, numberBoard)
+    validMoves = checkGameOver(numberBoard)
 
-    if(remove) {
-        toRemove.push(lastEl)
-        toRemove.push(el)
-    }
-
-
-    bottomVal = pos - (pos % 6)
-    el = document.getElementById(bottomVal + 2)
-    lastEl = document.getElementById(bottomVal + 1)
-    lastLastEl = document.getElementById(bottomVal)
-    val = getColour(el.children[0] ?? '')
-    lastVal = getColour(lastEl.children[0] ?? '')
-    lastLastVal = getColour(lastLastEl.children[0] ?? '')
-    remove = false
-
-    for(var i = 3; i < 7; i++){
-        if(val == lastVal && lastLastVal == lastVal && val != 'none'){
-            counter++
-            lastLastEl.innerHTML = ''
-            remove = true
-        } else if((val != lastVal || lastLastVal != lastVal) && remove){
-            counter += 2
-            lastEl.innerHTML = ''
-            lastLastEl.innerHTML = ''
-            remove = false
-        }
-        if(i < 6){
-            lastLastVal = lastVal
-            lastLastEl = lastEl
-            lastVal = val
-            lastEl = el
-            el = document.getElementById(bottomVal + i)
-            val = getColour(el.children[0] ?? '')
-        }
-    }
-    if(remove) {
-        toRemove.push(lastEl)
-        toRemove.push(el)
-    }
-
-
-    for(const el of toRemove) {
-        el.innerHTML = ''
-    }
-
-    remainingChickens -= counter
+    remainingChickens -= score
     updateChickens()
 }
 
@@ -292,6 +229,102 @@ function resetBoard() {
     }
     remainingChickens = 368
     updateChickens()
+}
+
+function boardToElementGrid() {
+    var elementGrid = []
+    document.querySelectorAll('.gridRow').forEach((el, index) => {
+        let row = []
+        el.childNodes.forEach((cell) => {
+            row.push(cell.childNodes[0])
+        })
+        elementGrid.push(row)
+    })
+    return elementGrid
+}
+
+function elementGridToNumbers(elementGrid) {
+    var numberGrid = []
+    elementGrid.forEach((row) => {
+        var numberRow = []
+        row.forEach((cell) => {
+            let chicken = cell.querySelector('.chicken')
+            if(!chicken){
+                numberRow.push(0)
+            } else {
+                let classList = chicken.classList
+                if(classList.contains('yellow')) numberRow.push(1)
+                else if(classList.contains('red')) numberRow.push(2)
+                else if(classList.contains('pink')) numberRow.push(3)
+                else if(classList.contains('green')) numberRow.push(4)
+                else numberRow.push(0)
+            }
+        })
+        numberGrid.push(numberRow)
+    })
+    return numberGrid
+}
+
+function findWhatToRemove(board) {
+
+    var remove = []
+
+    for(var i = 0; i < 6; i++){
+        var row = Array(6).fill(0)
+        for(var j = 2; j < 6; j++){
+            if(board[i][j] !== 0 && board[i][j] === board[i][j-1] && board[i][j-1] ===
+    board[i][j-2]){
+                row[j] = row[j-1] = row[j-2] = 1
+            }
+        }
+        remove.push(row)
+    }
+
+    for(var i = 0; i < 6; i++){
+        for(var j = 2; j < 6; j++){
+            if(board[j][i] !== 0 && board[j][i] === board[j-1][i] && board[j-1][i] ===
+    board[j-2][i]){
+                remove[j][i] = remove[j-1][i] = remove[j-2][i] = 1
+            }
+        }
+    }
+
+    return remove
+}
+
+function removeStuffFromGrid(elementGrid, removeGrid, numberGrid) {
+    var score = 0
+    for(var i = 0; i < 6; i++){
+        for(var j = 0; j < 6; j++){
+            if(removeGrid[i][j] === 1){
+                elementGrid[i][j].innerHTML = ''
+                numberGrid[i][j] = 0
+                score++
+            }
+        }
+    }
+    return score
+}
+
+function checkGameOver(numberBoard) {
+    var horizontalMoves = false
+    var verticalMoves = false
+
+    for(var i = 0; i < 6; i++){
+        for(var j = 0; j < 5; j++){
+            if(numberBoard[i][j] === 0 && numberBoard[i][j + 1] === 0){
+                horizontalMoves = true
+            }
+        }
+    }
+    for(var i = 0; i < 6; i++){
+        for(var j = 0; j < 5; j++){
+            if(numberBoard[j][i] === 0 && numberBoard[j + 1][i] === 0){
+                verticalMoves = true
+            }
+        }
+    }
+    return [horizontalMoves, verticalMoves]
 }
 
 async function loadLeaderboard() {
