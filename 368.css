@@ -66,24 +66,24 @@ button:not(:disabled):active {
     position: relative;
 }
 
-.inlineLeft {
+.inline-left {
     display: inline-block;
 }
 
-.inlineRight {
+.inline-right {
     display: inline-block;
     text-align: right;
     right: 0;
     position: relative;
 }
 
-.counterContainer {
+.counter-container {
     width: 100%;
     vertical-align: middle;
     min-height: 25px;
 }
 
-.remainingChickens {
+.remaining-chickens {
     font-size: large;
     padding: 1px;
     left: 5px;
@@ -105,7 +105,7 @@ button:not(:disabled):active {
     background-color: rgb(23, 0, 97);
 }
 
-.gridRow {
+.grid-row {
     height: calc(100% / 6); 
 }
 
@@ -118,13 +118,13 @@ button:not(:disabled):active {
     margin: 1vw;
 }
 
-.gridElement {
+.grid-element {
     display: inline-block;
     width: calc(100% / 6);
     height: 100%;
 }
 
-.gridElementInner {
+.grid-element-inner {
     background-color: rgb(4, 4, 180);
     margin: 15%;
     width: 70%;
@@ -133,7 +133,7 @@ button:not(:disabled):active {
 
 /** Chicken styles **/
 
-.chickenHolder {
+.chicken-holder {
     background-color: transparent;
     width: fit-content;
     height: fit-content;
@@ -166,11 +166,16 @@ button:not(:disabled):active {
     background-color: red;
 }
 
-.gridElementInner .chicken {
+.grid-element-inner .chicken {
     width: 80%;
     height: 80%;
     left: 10%;
     margin: 0;
+}
+
+.chicken-gen {
+    min-height: 10vw;
+    width: 100%;
 }
 
 @media only screen and (max-width: 750px) {
@@ -199,17 +204,17 @@ button:not(:disabled):active {
         margin: 2vw;
     }
 
-    .counterContainer {
+    .counter-container {
         padding-left: 10%;
         height: 10vh;
     }
 
-    .inlineLeft {
+    .inline-left {
         display: block;
         padding-left: 10%;
     }
 
-    .inlineRight {
+    .inline-right {
         display: block;
         text-align: center;
         right: 50%;
@@ -220,7 +225,7 @@ button:not(:disabled):active {
 
 @media only screen and (max-width: 250px) {
     
-    .inlineLeft {
+    .inline-left {
         padding-left: 0%;
     }
 

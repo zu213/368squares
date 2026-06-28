@@ -8,6 +8,7 @@ var offsetX = 0
 var offsetY = 0
 var genChicken = true
 var draggable
+var gameOver = false
 var validMoves = [true, true]
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -15,11 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     for(var i = 0; i < 6; i++){
         let gridRowElement = document.createElement('div') 
-        gridRowElement.classList.add('gridRow')
+        gridRowElement.classList.add('grid-row')
         for(var j = 0; j<6; j++){
             let gridColumnElement = document.createElement('div')
-            gridColumnElement.innerHTML = `<div id="${i*6 + j}" class="gridElementInner"></div>`
-            gridColumnElement.classList.add('gridElement')
+            gridColumnElement.innerHTML = `<div id="${i*6 + j}" class="grid-element-inner"></div>`
+            gridColumnElement.classList.add('grid-element')
             gridRowElement.appendChild(gridColumnElement)
         }
         grid.appendChild(gridRowElement)
@@ -63,10 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function assignPositions(chickens){
     let randomNum = Math.random()
-    if((randomNum <= 0.5 && validMoves[0]) || !validMoves[1]){
+    if((randomNum <= 0.5 || !validMoves[0]) && validMoves[1]) {
         chickens.children[0].classList.add('top')
         chickens.children[1].classList.add('bottom')
-    }else if(validMoves[1]){
+    }else if(validMoves[0]){
         chickens.children[0].classList.add('left')
         chickens.children[1].classList.add('right')
     } else {
@@ -107,20 +108,19 @@ function checkValidPlace(e, direction, draggable){
             elementAbove.appendChild(right)
             draggable.classList.remove('draggable')
             checkMatch(Number(element.id))
-            checkMatch(Number(element.id) + 1)
             generateChicken()
 
         }else{
             chickenGen.appendChild(draggable)
         }
-    } else if(Number(element.id) % 6 < 30) {
+    } else if(direction == 1 && Number(element.id) % 6 < 30) {
         let elementAbove = document.getElementById(`${Number(element.id) + 6}`)
         if(element.innerHTML == '' && elementAbove && elementAbove?.innerHTML == '' && !element.classList.contains('chicken') && !elementAbove.classList.contains('chicken')){
+            console.log(element)
             element.appendChild(draggable.querySelector('.top')) // Move draggable to cell
             elementAbove.appendChild(draggable.querySelector('.bottom'))
             draggable.classList.remove('draggable')
             checkMatch(Number(element.id))
-            checkMatch(Number(element.id) + 6)
             generateChicken()
 
         }else{
@@ -134,16 +134,18 @@ function checkValidPlace(e, direction, draggable){
 
 
 function generateChicken(){
+    if(gameOver) return
     chickenGen = document.getElementById('chickenGen')
     let chickens = document.createElement('div')
     let chicken1 = document.createElement('div')
     let chicken2 = document.createElement('div')
     chickens.classList.add('draggable')
-    chickens.classList.add('chickenHolder')
+    chickens.classList.add('chicken-holder')
     chicken1.classList.add('chicken')
     chicken2.classList.add('chicken')
     chickens.appendChild(chicken1)
     chickens.appendChild(chicken2)
+    console.log(chickens)
     let classChickens = assignPositions(chickens)
     if(!classChickens) return
     chickenGen.appendChild(classChickens)
@@ -214,10 +216,17 @@ function checkMatch(pos){
     const removeBoard = findWhatToRemove(numberBoard)
     const score = removeStuffFromGrid(elementBoard, removeBoard, numberBoard)
     validMoves = checkGameOver(numberBoard)
+    if (!validMoves[0] && !validMoves[1]){
+        gameOver = true
+        alert('Game Over!')
+        return
+    }
 
     remainingChickens -= score
     updateChickens()
 }
+
+function showGameOver() {}
 
 function resetBoard() {
 
@@ -228,12 +237,15 @@ function resetBoard() {
         }
     }
     remainingChickens = 368
+    gameOver = false
+    validMoves = [true, true]
     updateChickens()
+    generateChicken()
 }
 
 function boardToElementGrid() {
     var elementGrid = []
-    document.querySelectorAll('.gridRow').forEach((el, index) => {
+    document.querySelectorAll('.grid-row').forEach((el, index) => {
         let row = []
         el.childNodes.forEach((cell) => {
             row.push(cell.childNodes[0])
