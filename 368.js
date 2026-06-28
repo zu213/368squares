@@ -1,13 +1,13 @@
 import { fetchBoard } from './bridge.js'
+import { createChickens } from './createChickens.js'
 
 var remainingChickens = 368
-var chickenGen
 var isDragging = false
 var direction
 var offsetX = 0
 var offsetY = 0
 var genChicken = true
-var draggable
+var chickenDragElement
 var gameOver = false
 var validMoves = [true, true]
 
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // allow Dropping in Grid
     document.addEventListener("mouseup", (e) => {
         if (isDragging) {
-            checkValidPlace(e, direction, draggable)
+            checkValidPlace(e, direction, chickenDragElement)
             isDragging = false
         }
     })
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isDragging) {
             e.preventDefault()
             let touch = e.touches[0] || e.changedTouches[0]
-            checkValidPlace(touch, direction, draggable)
+            checkValidPlace(touch, direction, chickenDragElement)
             isDragging = false
         }
      }, { passive: false })
@@ -62,107 +62,55 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('resetButton').addEventListener('click', resetBoard)
 })
 
-function assignPositions(chickens){
-    let randomNum = Math.random()
-    if((randomNum <= 0.5 || !validMoves[0]) && validMoves[1]) {
-        chickens.children[0].classList.add('top')
-        chickens.children[1].classList.add('bottom')
-    }else if(validMoves[0]){
-        chickens.children[0].classList.add('left')
-        chickens.children[1].classList.add('right')
-    } else {
-        return
-    }
-    for(var i = 0; i < 2; i++){
-        let colour = Math.random()
-        if(colour <= 0.25){
-            chickens.children[i].classList.add('pink')
-        }else  if(colour <= 0.5){
-            chickens.children[i].classList.add('red')
-        }else  if(colour <= 0.75){
-            chickens.children[i].classList.add('green')
-        }else {
-            chickens.children[i].classList.add('yellow')
-        }
-    }
-    return chickens
-}
-
-function checkValidPlace(e, direction, draggable){
+function checkValidPlace(e, direction, chickenDragElement){
     // left: 1, up: 2, right: 3, down: 4
-    draggable.style.display = "none"
+    chickenDragElement.style.display = "none"
     const xPoint = e.clientX - (offsetX - 20) * 0.5
     const yPoint = e.clientY - offsetY * 0.5
     let element = document.elementFromPoint(xPoint, yPoint)
     if(element.innerHTML != '') element = element.childNodes[0]
-    draggable.style.display = "block"
+    chickenDragElement.style.display = "block"
 
     if(direction == 2  && Number(element.id) % 6 != 5){
         let elementAbove = document.getElementById(`${Number(element.id) + 1}`)
         if(element.innerHTML == '' && elementAbove && elementAbove?.innerHTML == '' && !element.classList.contains('chicken') && !elementAbove.classList.contains('chicken')){
-            const left = draggable.querySelector('.left')
+            const left = chickenDragElement.querySelector('.left')
             left.classList.remove('left')
-            const right = draggable.querySelector('.right')
+            const right = chickenDragElement.querySelector('.right')
             right.classList.remove('right')
             element.appendChild(left) // Move draggable to cell
             elementAbove.appendChild(right)
-            draggable.classList.remove('draggable')
+            chickenDragElement.classList.remove('draggable')
             checkMatch(Number(element.id))
             generateChicken()
 
         }else{
-            chickenGen.appendChild(draggable)
+            document.getElementById('chickenGenerator').appendChild(chickenDragElement)
         }
     } else if(direction == 1 && Number(element.id) % 6 < 30) {
         let elementAbove = document.getElementById(`${Number(element.id) + 6}`)
         if(element.innerHTML == '' && elementAbove && elementAbove?.innerHTML == '' && !element.classList.contains('chicken') && !elementAbove.classList.contains('chicken')){
             console.log(element)
-            element.appendChild(draggable.querySelector('.top')) // Move draggable to cell
-            elementAbove.appendChild(draggable.querySelector('.bottom'))
-            draggable.classList.remove('draggable')
+            element.appendChild(chickenDragElement.querySelector('.top')) // Move draggable to cell
+            elementAbove.appendChild(chickenDragElement.querySelector('.bottom'))
+            chickenDragElement.classList.remove('draggable')
             checkMatch(Number(element.id))
             generateChicken()
 
         }else{
-            chickenGen.appendChild(draggable)
+            document.getElementById('chickenGenerator').appendChild(chickenDragElement)
         }
     }
-    draggable.style.position = "relative" // Reset position to align with cell
-    draggable.style.left = "0px"
-    draggable.style.top = "0px"
+    chickenDragElement.style.position = "relative" // Reset position to align with cell
+    chickenDragElement.style.left = "0px"
+    chickenDragElement.style.top = "0px"
 }
 
 
 function generateChicken(){
     if(gameOver) return
-    chickenGen = document.getElementById('chickenGen')
-    let chickens = document.createElement('div')
-    let chicken1 = document.createElement('div')
-    let chicken2 = document.createElement('div')
-    chickens.classList.add('draggable')
-    chickens.classList.add('chicken-holder')
-    chicken1.classList.add('chicken')
-    chicken2.classList.add('chicken')
-    chickens.appendChild(chicken1)
-    chickens.appendChild(chicken2)
-    console.log(chickens)
-    let classChickens = assignPositions(chickens)
-    if(!classChickens) return
-    chickenGen.appendChild(classChickens)
-
-    draggable = document.querySelector(".draggable")  
-
-    // Drag Start Event
-    draggable.addEventListener("mousedown", (e) => {
-        e.preventDefault()
-        handleDrag(e)
-    })
-
-    draggable.addEventListener("touchstart", (e) => {
-        e.preventDefault()
-        let touch = e.touches[0] || e.changedTouches[0]
-        handleDrag(touch)
-    }, { passive: false })
+    chickenDragElement = createChickens(handleDrag, validMoves)
+    document.getElementById('chickenGenerator').appendChild(chickenDragElement)
 }
 
 function handleDrag(e) {
@@ -183,14 +131,14 @@ function handleDrag(e) {
         throw Error('Error')
     }
     isDragging = true
-    draggable.style.zIndex = "1000"
+    chickenDragElement.style.zIndex = "1000"
 }
 
 function moveSquare(e) {
     if (isDragging) {
-        draggable.style.position = 'fixed'
-        draggable.style.left = `${e.clientX - offsetX}px`
-        draggable.style.top = `${e.clientY - offsetY}px`
+        chickenDragElement.style.position = 'fixed'
+        chickenDragElement.style.left = `${e.clientX - offsetX}px`
+        chickenDragElement.style.top = `${e.clientY - offsetY}px`
     }
 }
 
