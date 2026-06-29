@@ -16,9 +16,12 @@ jobs:
 
       - name: Update submodule
         run: |
-          git submodule update --remote public/squares
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          cd public/squares
+          git checkout main
+          git pull origin main
+          cd ../..
           git add public/squares
           git diff --staged --quiet || git commit -m "chore: update 368squares submodule"
           git push
