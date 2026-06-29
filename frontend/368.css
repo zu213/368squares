@@ -178,6 +178,37 @@ button:not(:disabled):active {
     width: 100%;
 }
 
+/* Leader board entry */
+.leaderboard-form-container {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffffff8e;
+    padding: 20px;
+}
+
+.leaderboard-close {
+    float: right;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.leaderboard-form {
+    width: fit-content;
+    height: fit-content;
+    background-color: #c3c8d8;
+    padding: 20px;
+}
+
+/* Media queries */ 
+
 @media only screen and (max-width: 750px) {
     .grid {
         height: 80vw;

@@ -1,6 +1,6 @@
 export function postInputToBoard(name, score) {
     name = name.replaceAll(":", "")
-    fetch("https://368-api.vercel.app/api/add", {
+    return fetch("https://368-api.vercel.app/api/add", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
