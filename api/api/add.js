@@ -46,7 +46,11 @@ export default async function handler(req, res) {
   });
 
   const newScore = parseInt(value.split(":")[1]);
-  const newName = value.split(":")[0];
+  const newName = value.split(":")[0].slice(0, 4);
+
+  if (isNaN(newScore) || newScore < -999 || newScore > 368) {
+    return res.status(400).json({ error: "Score out of range" });
+  }
 
   // Insert in sorted order (ascending score)
   const insertAt = processedLeaderboard.findIndex(e => e.score > newScore);

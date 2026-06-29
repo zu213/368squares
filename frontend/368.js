@@ -3,6 +3,7 @@ import { createChickens } from './frontend-logic/createChickens.js'
 import { elementGridToNumbers, findWhatToRemove, removeStuffFromGrid, checkGameOver, getColour } from './frontend-logic/board.js'
 
 var remainingChickens = 368
+var cachedBoard = []
 var isDragging = false
 var direction
 var offsetX = 0
@@ -46,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // allow Dropping in Grid
     document.addEventListener("mouseup", (e) => {
         if (isDragging) {
+            clearHighlights()
             checkValidPlace(e, direction, chickenDragElement)
             isDragging = false
         }
@@ -54,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("touchend", (e) => {
         if (isDragging) {
             e.preventDefault()
+            clearHighlights()
             let touch = e.touches[0] || e.changedTouches[0]
             checkValidPlace(touch, direction, chickenDragElement)
             isDragging = false
@@ -137,11 +140,40 @@ function handleDrag(e) {
     chickenDragElement.style.zIndex = "1000"
 }
 
+var highlightedCells = []
+
+function clearHighlights() {
+    highlightedCells.forEach(el => el.classList.remove('drop-highlight'))
+    highlightedCells = []
+}
+
 function moveSquare(e) {
     if (isDragging) {
         chickenDragElement.style.position = 'fixed'
         chickenDragElement.style.left = `${e.clientX - offsetX}px`
         chickenDragElement.style.top = `${e.clientY - offsetY}px`
+
+        clearHighlights()
+        chickenDragElement.style.display = "none"
+        const xPoint = e.clientX - (offsetX - 20) * 0.5
+        const yPoint = e.clientY - offsetY * 0.5
+        let element = document.elementFromPoint(xPoint, yPoint)
+        chickenDragElement.style.display = "block"
+        if (!element) return
+        if (element.innerHTML != '') element = element.childNodes[0]
+        if (!element || !element.id) return
+
+        let partner = null
+        if (direction == 2 && Number(element.id) % 6 != 5)
+            partner = document.getElementById(`${Number(element.id) + 1}`)
+        else if (direction == 1 && Number(element.id) < 30)
+            partner = document.getElementById(`${Number(element.id) + 6}`)
+
+        if (partner) {
+            element.classList.add('drop-highlight')
+            partner.classList.add('drop-highlight')
+            highlightedCells = [element, partner]
+        }
     }
 }
 
@@ -197,21 +229,26 @@ function boardToElementGrid() {
 
 async function loadLeaderboard() {
     const leaderboard = document.getElementById('leaderboard-list')
-    const boardList = await fetchBoard()
-    for(const entry of boardList) {
+    leaderboard.innerHTML = ''
+    const boardList = await fetchBoard().catch(() => null)
+    if (!boardList) {
+        leaderboard.innerHTML = '<div class="leaderboard-error">Couldn\'t load scores</div>'
+        return
+    }
+    cachedBoard = boardList.slice(0, 10)
+    cachedBoard.forEach((entry, i) => {
         const entryElement = document.createElement('div')
         entryElement.classList.add('leaderboard-entry')
-        entryElement.innerHTML = `<span class="leaderboard-name">${entry.name}</span>
-                                  <span class="leaderboard-score">${entry.score}</span>`
+        entryElement.innerHTML = `<span class="leaderboard-rank">${i + 1}</span><span class="leaderboard-name">${entry.name}</span><span class="leaderboard-score">${entry.score}</span>`
         leaderboard.appendChild(entryElement)
-    }
+    })
 }
 
 function showGameOver(score) {
     const scoreSubmitTemplate = document.getElementById('leaderboardEntryTemplate')
     const scoreSubmitElement = scoreSubmitTemplate.content.cloneNode(true)
 
-    scoreSubmitElement.querySelector('.leaderboard-score-input').value = score
+    scoreSubmitElement.querySelector('.leaderboard-score-input').textContent = score
 
     const scoreForm = scoreSubmitElement.querySelector('#scoreForm')
     const container = scoreSubmitElement.querySelector('.leaderboard-form-container')
@@ -227,10 +264,15 @@ function showGameOver(score) {
     scoreForm.addEventListener('submit', (e) => {
         e.preventDefault()
         const nameInput = scoreForm.querySelector('.leaderboard-name-input')
-        postInputToBoard(nameInput.value, score).then(() => {
-            loadLeaderboard()
+        const qualifies = cachedBoard.length < 10 || score < cachedBoard[cachedBoard.length - 1].score
+        if (qualifies) {
+            postInputToBoard(nameInput.value, score).then(() => {
+                loadLeaderboard()
+                close()
+            })
+        } else {
             close()
-        })
+        }
     })
 
     document.body.appendChild(scoreSubmitElement)
