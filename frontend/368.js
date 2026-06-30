@@ -30,8 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     generateChicken()
 
-            showGameOver(370)
-
     // Mouse Move -> Move Element with Cursor
     document.addEventListener("mousemove", (e) => {
         e.preventDefault()

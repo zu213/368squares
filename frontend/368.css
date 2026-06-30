@@ -2,14 +2,14 @@
   --main-bg-colour: #1c3176;
   --highlight-bg-colour: rgb(23, 0, 97);
   --highlight-fg-colour: rgb(4, 4, 180);
-  --hightlight-text-colour: rgb(228, 226, 226);
+  --highlight-text-colour: rgb(228, 226, 226);
 }
 
 /** General styles **/
 body {
     font-family: 'Courier New', monospace;
     background-color: var(--main-bg-colour);
-    color: var(--hightlight-text-colour);
+    color: var(--highlight-text-colour);
     user-select: none; 
 }
 
@@ -216,16 +216,12 @@ button:not(:disabled):active {
     align-items: center;
     padding: 6px 8px;
     margin-bottom: 4px;
-    border: 1px solid #00ffcc44;
-    background: #00ffcc0a;
+    border: 1px solid var(--highlight-fg-colour);
+    background: var(--highlight-bg-colour);
     font-size: 0.8rem;
     transition: background 0.15s;
     width: 100%;
     box-sizing: border-box;
-}
-
-.leaderboard-entry:hover {
-    background: #00ffcc1a;
 }
 
 .leaderboard-rank {
@@ -236,7 +232,7 @@ button:not(:disabled):active {
 }
 
 #leaderboard-list .leaderboard-name {
-    color: #e0e0ff;
+    color: var(--highlight-text-colour);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -245,9 +241,9 @@ button:not(:disabled):active {
 }
 
 #leaderboard-list .leaderboard-score {
-    color: #00ffcc;
+    color: var(--highlight-text-colour);
     font-weight: bold;
-    text-shadow: 0 0 6px #00ffcc88;
+    text-shadow: 0 0 6px var(--highlight-text-colour);
     white-space: nowrap;
     flex: 1;
     text-align: right;
@@ -272,9 +268,9 @@ button:not(:disabled):active {
 .leaderboard-form {
     width: fit-content;
     height: fit-content;
-    background-color: #0a0a2e;
-    border: 3px solid #00ffcc;
-    box-shadow: 0 0 32px #00ffcc55, inset 0 0 20px #00ffcc08;
+    background-color: var(--highlight-bg-colour);
+    border: 3px solid var(--highlight-fg-colour);
+    box-shadow: 0 0 32px var(--highlight-fg-colour), inset 0 0 20px var(--highlight-fg-colour);
     padding: 28px 32px;
     position: relative;
     font-family: 'Courier New', monospace;
@@ -284,11 +280,11 @@ button:not(:disabled):active {
     content: 'GAME OVER';
     display: block;
     text-align: center;
-    color: #ff4466;
+    color: var(--highlight-text-colour);
     font-size: 1.4rem;
     letter-spacing: 0.2em;
     font-weight: bold;
-    text-shadow: 0 0 12px #ff4466, 0 0 24px #ff446688;
+    text-shadow: 0 0 12px var(--highlight-text-colour), 0 0 24px var(--highlight-text-colour);
     margin-bottom: 20px;
 }
 
@@ -304,8 +300,8 @@ button:not(:disabled):active {
     top: 8px;
     right: 8px;
     background: none;
-    border: 1px solid #ff446688;
-    color: #ff4466;
+    border: 1px solid var(--highlight-text-colour);
+    color: var(--highlight-text-colour);
     cursor: pointer;
     font-size: 0.8rem;
     padding: 2px 6px;
@@ -314,15 +310,11 @@ button:not(:disabled):active {
     transition: background 0.15s;
 }
 
-.leaderboard-close:hover {
-    background: #ff446622;
-}
-
 .leaderboard-name-input,
 .leaderboard-score-input {
-    background: #00001a;
-    border: 1px solid #00ffcc88;
-    color: #00ffcc;
+    background: var(--highlight-bg-colour);
+    border: 1px solid var(--highlight-text-colour);
+    color: var(--highlight-text-colour);
     font-family: 'Courier New', monospace;
     font-size: 0.9rem;
     padding: 6px 10px;
@@ -332,19 +324,14 @@ button:not(:disabled):active {
 }
 
 .leaderboard-name-input::placeholder {
-    color: #00ffcc44;
-}
-
-.leaderboard-name-input:focus {
-    border-color: #00ffcc;
-    box-shadow: 0 0 8px #00ffcc44;
+    color: #ffffff88;
 }
 
 .leaderboard-submit {
-    background: #00ffcc;
+    background: var(--highlight-fg-colour);
     border: none;
-    color: #0a0a2e;
-    font-family: 'Courier New', monospace;
+    color: var(--highlight-text-colour);
+    font-famil`y: 'Courier New', monospace;
     font-weight: bold;
     font-size: 0.9rem;
     letter-spacing: 0.1em;
@@ -356,7 +343,7 @@ button:not(:disabled):active {
 }
 
 .leaderboard-submit:hover {
-    box-shadow: 0 0 12px #00ffcc99;
+    box-shadow: 0 0 12px var(--highlight-fg-colour);
 }
 
 .leaderboard-submit:active {
