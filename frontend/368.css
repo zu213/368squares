@@ -10,7 +10,12 @@ body {
     font-family: 'Courier New', monospace;
     background-color: var(--main-bg-colour);
     color: var(--highlight-text-colour);
-    user-select: none; 
+    user-select: none;
+    margin: 20px 0;
+
+    .game {
+        min-height: 100dvh;
+    }
 }
 
 h1 {
@@ -40,6 +45,17 @@ button {
 
 button:not(:disabled):active {
     transform: scale(0.95)
+}
+
+footer {
+    margin-top: 20px;
+    margin-bottom: 80px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--highlight-fg-colour);
+    height: 1px;
 }
 
 /** Top of the page **/

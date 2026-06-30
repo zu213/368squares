@@ -7,34 +7,41 @@
 
 <body>
 
-    <h1>
-        Matching game
-    </h1>
-    <div class="intro">
-        Drag and drop pairs of cubes into the grid match 3 or more in a row to remove them, 
-        try and get rid of as many as possible without filling up the board.
-    </div>
+    <div class="game">
+        <h1>
+            Matching game
+        </h1>
+        <div class="intro">
+            Drag and drop pairs of cubes into the grid match 3 or more in a row to remove them, 
+            try and get rid of as many as possible without filling up the board.
+        </div>
 
-    <div id="background" class="container">
-        
-        <div class="counter-container">
-            <div id="remainingChickens" class="inline-left remaining-chickens"></div>
-            <div class="inline-right absolute">
-                <button id="resetButton">Reset</button>
+        <div id="background" class="container">
+            
+            <div class="counter-container">
+                <div id="remainingChickens" class="inline-left remaining-chickens"></div>
+                <div class="inline-right absolute">
+                    <button id="resetButton">Reset</button>
+                </div>
+            </div>
+
+            <div id="grid" class="grid"></div>
+            <div id="chickenGenerator" class="chicken-gen"></div>
+        </div>
+
+        <div class="leaderboard">
+            <h2>Leaderboard</h2>
+            <div id="leaderboard-list">
+
             </div>
         </div>
-
-        <div id="grid" class="grid"></div>
-        <div id="chickenGenerator" class="chicken-gen"></div>
     </div>
-
-    <div class="leaderboard">
-        <h2>Leaderboard</h2>
-        <div id="leaderboard-list">
-
-        </div>
-    </div>
+    <footer>
+        <hr />
+    
+    </footer>
 </body>
+
 
 <template id="leaderboardEntryTemplate">
     <div class="leaderboard-form-container">
