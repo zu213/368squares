@@ -115,7 +115,9 @@ function checkValidPlace(e, direction, chickenDragElement){
 function generateChicken(){
     if(gameOver) return
     chickenDragElement = createChickens(handleDrag, validMoves)
-    document.getElementById('chickenGenerator').appendChild(chickenDragElement)
+    const generator = document.getElementById('chickenGenerator')
+    generator.innerHTML = ''
+    generator.appendChild(chickenDragElement)
 }
 
 function handleDrag(e) {
