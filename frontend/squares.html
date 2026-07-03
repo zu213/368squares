@@ -8,20 +8,17 @@
 <body>
 
     <div class="game">
+        <button id="infoButton" class="info-button" aria-label="How to play">i</button>
         <h1>
-            Matching game
+            368 Squares
         </h1>
-        <div class="intro">
-            Drag and drop pairs of cubes into the grid match 3 or more in a row to remove them, 
-            try and get rid of as many as possible without filling up the board.
-        </div>
 
         <div id="background" class="container">
             
             <div class="counter-container">
                 <div id="remainingChickens" class="inline-left remaining-chickens"></div>
-                <div class="inline-right absolute">
-                    <button id="resetButton">Reset</button>
+                <div class="inline-right">
+                    <button id="resetButton" class="reset-button">Reset</button>
                 </div>
             </div>
 
@@ -43,9 +40,23 @@
 </body>
 
 
+<template id="infoPopupTemplate">
+    <div class="leaderboard-form-container">
+        <div class="leaderboard-form info-popup">
+            <button type="button" class="leaderboard-close">x</button>
+            <h2 class="leaderboard-form-title">HOW TO PLAY</h2>
+            <p>
+                Drag and drop pairs of cubes into the grid match 3 or more in a row to remove them,
+                try and get rid of as many as possible without filling up the board.
+            </p>
+        </div>
+    </div>
+</template>
+
 <template id="leaderboardEntryTemplate">
     <div class="leaderboard-form-container">
         <div class="leaderboard-form">
+            <h2 class="leaderboard-form-title">GAME OVER</h2>
             <form id="scoreForm">
                 <button type="button" class="leaderboard-close">x</button>
                 <span class="leaderboard-name">

@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateChickens()
     loadLeaderboard()
     document.getElementById('resetButton').addEventListener('click', resetBoard)
+    document.getElementById('infoButton').addEventListener('click', showInfoPopup)
 })
 
 function checkValidPlace(e, direction, chickenDragElement){
@@ -209,6 +210,7 @@ function resetBoard() {
     remainingChickens = 368
     gameOver = false
     validMoves = [true, true]
+    document.getElementById('chickenGenerator').innerHTML = ''
     updateChickens()
     generateChicken()
 }
@@ -240,6 +242,21 @@ async function loadLeaderboard() {
         entryElement.innerHTML = `<span class="leaderboard-rank">${i + 1}</span><span class="leaderboard-name">${entry.name}</span><span class="leaderboard-score">${entry.score}</span>`
         leaderboard.appendChild(entryElement)
     })
+}
+
+function showInfoPopup() {
+    const template = document.getElementById('infoPopupTemplate')
+    const popup = template.content.cloneNode(true)
+    const container = popup.querySelector('.leaderboard-form-container')
+
+    const close = () => document.body.removeChild(container)
+
+    popup.querySelector('.leaderboard-close').addEventListener('click', close)
+    container.addEventListener('click', (e) => {
+        if (e.target === container) close()
+    })
+
+    document.body.appendChild(popup)
 }
 
 function showGameOver(score) {

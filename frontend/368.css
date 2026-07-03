@@ -19,9 +19,10 @@ body {
 }
 
 h1 {
+    font-size: 2.5rem;
     text-align: center;
     margin-bottom: 8px;
-    margin-top: 8px;
+    margin-top: 14px;
 }
 
 
@@ -60,19 +61,58 @@ hr {
 
 /** Top of the page **/
 
-.intro {
-    padding-bottom: 10px;
-    padding-left: 10%;
-    padding-right: 10%;
+.info-button {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-style: italic;
+    font-weight: bold;
+    padding: 0;
+    z-index: 10;
     text-align: center;
+    color: var(--highlight-text-colour);
+    background-color: var(--background-color);
+    border: 2px solid var(--highlight-text-colour);
+}
+
+.info-popup p {
+    max-width: 60vw;
     font-size: small;
+    margin: 0;
+}
+
+.reset-button {
+  background-color: var(--highlight-fg-colour);
+  border-radius: 5px;
+  border-style: none;
+  padding: 0.5em 1.75em;
+  box-shadow: rgba(245, 244, 247, .25) 0 1px 1px inset;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  outline: 0;
+  text-align: center;
+  transition: all .3s cubic-bezier(.05, .03, .35, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.reset-button:hover {
+  opacity: .7;
 }
 
 .container {
     width: 24vw;
     min-width: 200px;
     position: relative;
-    left: 37vw;
+    left: 38vw;
     height: 100%;
 }
 
@@ -100,8 +140,10 @@ hr {
 
 .counter-container {
     width: 100%;
-    vertical-align: middle;
     min-height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .remaining-chickens {
@@ -109,8 +151,6 @@ hr {
     padding: 1px;
     left: 5px;
     position: relative;
-    vertical-align: middle;
-    padding-top: 8px;
 }
 
 .absolute {
@@ -120,9 +160,9 @@ hr {
 /** Grid styles **/
 
 .grid {
-    height: 23vw;
+    aspect-ratio: 1 / 1;
     width: 95%;
-    margin: 5%;
+    margin: 5% 2.5%;
     background-color: var(--highlight-bg-colour);
 }
 
@@ -199,7 +239,7 @@ hr {
 }
 
 .chicken-gen {
-    min-height: 8vw;
+    min-height: 7vw;
     width: 100%;
 }
 
@@ -210,7 +250,7 @@ hr {
     box-shadow: 0 -4px 24px var(--highlight-fg-colour);
     padding: 16px 24px;
     font-family: 'Courier New', monospace;
-    margin-top: 32px;
+    margin-top: 16px;
     width: 300px;
     margin-left: auto;
     margin-right: auto;
@@ -292,8 +332,7 @@ hr {
     font-family: 'Courier New', monospace;
 }
 
-.leaderboard-form::before {
-    content: 'GAME OVER';
+.leaderboard-form-title {
     display: block;
     text-align: center;
     color: var(--highlight-text-colour);
@@ -301,7 +340,7 @@ hr {
     letter-spacing: 0.2em;
     font-weight: bold;
     text-shadow: 0 0 12px var(--highlight-text-colour), 0 0 24px var(--highlight-text-colour);
-    margin-bottom: 20px;
+    margin: 0 0 20px;
 }
 
 .leaderboard-form form {
@@ -347,7 +386,7 @@ hr {
     background: var(--highlight-fg-colour);
     border: none;
     color: var(--highlight-text-colour);
-    font-famil`y: 'Courier New', monospace;
+    font-family: 'Courier New', monospace;
     font-weight: bold;
     font-size: 0.9rem;
     letter-spacing: 0.1em;
