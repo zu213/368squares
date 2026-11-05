@@ -231,8 +231,9 @@ function boardToElementGrid() {
 
 async function loadLeaderboard() {
     const leaderboard = document.getElementById('leaderboard-list')
-    leaderboard.innerHTML = ''
+    leaderboard.innerHTML = '<div class="leaderboard-spinner" role="status" aria-label="Loading scores"></div>'
     const boardList = await fetchBoard().catch(() => null)
+    leaderboard.innerHTML = ''
     if (!boardList) {
         leaderboard.innerHTML = '<div class="leaderboard-error">Couldn\'t load scores</div>'
         return

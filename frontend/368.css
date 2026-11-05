@@ -305,6 +305,20 @@ hr {
     text-align: right;
 }
 
+.leaderboard-spinner {
+    width: 32px;
+    height: 32px;
+    margin: 16px auto;
+    border: 3px solid var(--highlight-fg-colour);
+    border-top-color: var(--highlight-text-colour);
+    border-radius: 50%;
+    animation: leaderboard-spin 0.8s linear infinite;
+}
+
+@keyframes leaderboard-spin {
+    to { transform: rotate(360deg); }
+}
+
 /* Game over modal */
 .leaderboard-form-container {
     position: fixed;
