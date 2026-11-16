@@ -284,6 +284,11 @@ function showGameOver(score) {
         const nameInput = scoreForm.querySelector('.leaderboard-name-input')
         const qualifies = cachedBoard.length < 10 || score < cachedBoard[cachedBoard.length - 1].score
         if (qualifies) {
+            const spinner = document.createElement('div')
+            spinner.className = 'leaderboard-spinner'
+            spinner.setAttribute('role', 'status')
+            spinner.setAttribute('aria-label', 'Submitting score')
+            scoreForm.querySelector('.leaderboard-submit').replaceWith(spinner)
             postInputToBoard(nameInput.value, score).then(() => {
                 loadLeaderboard()
                 close()
